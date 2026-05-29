@@ -1,0 +1,6 @@
+{
+  "name": "Shortly",
+  "description": "A clean, minimalist and basic URL shortener project to easily shorten long links and track recent history.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
