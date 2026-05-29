@@ -49,12 +49,19 @@ public class URLRecord {
     private List<String> tags;
     
     @Column(nullable = false)
-    private boolean isActive = true;
+    private Boolean isActive = true;
+
+    public boolean isActive() {
+        return isActive != null && isActive;
+    }
     
     private LocalDateTime createdAt;
     
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.isActive == null) {
+            this.isActive = true;
+        }
     }
 }

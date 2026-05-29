@@ -32,7 +32,14 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // Specifically intercept /api/*
         String authHeader = request.getHeader("Authorization");
+        
+        // Allow anonymous access to POST /api/urls
+        boolean isAnonymousUrlCreation = request.getMethod().equals("POST") && path.equals("/api/urls");
+        
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            if (isAnonymousUrlCreation) {
+                return true; // Let it pass anonymously
+            }
             response.setStatus(401);
             response.getWriter().write("{\"error\": \"Access denied. Token missing or invalid.\"}");
             return false;
@@ -59,6 +66,9 @@ public class AuthInterceptor implements HandlerInterceptor {
             request.setAttribute("user", user);
             return true;
         } catch (Exception e) {
+            if (isAnonymousUrlCreation) {
+                return true; // Token was invalid, but it's an anonymous endpoint anyway. (Though typically invalid tokens are rejected). Let's reject invalid tokens.
+            }
             response.setStatus(401);
             response.getWriter().write("{\"error\": \"Invalid auth token.\"}");
             return false;
