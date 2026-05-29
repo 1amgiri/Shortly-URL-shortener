@@ -11,5 +11,17 @@ export default defineConfig(() => {
         '@': path.resolve(__dirname, '.'),
       },
     },
+    server: {
+      proxy: {
+        '/api': {
+          target: 'http://localhost:8080',
+          changeOrigin: true
+        },
+        '/r': {
+          target: 'http://localhost:8080',
+          changeOrigin: true
+        }
+      }
+    }
   };
 });
